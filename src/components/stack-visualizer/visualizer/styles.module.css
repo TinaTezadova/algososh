@@ -1,0 +1,12 @@
+.wrapper {
+    max-width: 944px;
+    display: flex;
+    width: max-content;
+    flex-wrap: wrap;
+    margin: 48px auto 0 auto;
+
+}
+
+.circle:last-child {
+    margin-right: 0;
+}

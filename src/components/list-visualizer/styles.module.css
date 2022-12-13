@@ -1,0 +1,17 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.input {
+    flex-basis: 204px;
+    flex-shrink: 0;
+}

@@ -1,0 +1,21 @@
+.list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 952px;
+    list-style: none;
+    width: max-content;
+    padding: 0;
+    margin: 90px auto 0 auto;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.circle:last-child {
+    margin-right: 0;
+}
