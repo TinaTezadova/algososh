@@ -1,11 +1,12 @@
-import { ArrayItem, SetState } from "../../types/items";
-import { createNewArrayItem, delay } from "../../utils/utils";
+import { IArrayItem, SetState } from "../../types/items";
+import { delay } from "../../utils/utils";
 import { DELAY } from '../../consts/const';
 import { ElementStates } from "../../types/element-states";
+import { ArrayItem } from '../../classes/array-item';
 
 
 export async function addNewElements(
-    array: ArrayItem<string>[],
+    array: IArrayItem<string>[],
     value: string,
     action: 'addToHead' | 'addToTail' | 'addItemByIndex',
     setElementsForRender: SetState,
@@ -30,7 +31,7 @@ export async function addNewElements(
         }
 
         array[tailIndex].tail = null;
-        array.push(createNewArrayItem(value, true, null, 'tail'));
+        array.push(new ArrayItem<string>(value, true, null, 'tail'));
         array.at(-1)!.state = ElementStates.Modified;
 
         setElementsForRender([...array]);
@@ -44,7 +45,7 @@ export async function addNewElements(
         await delay(DELAY);
 
         array[0].head = null;
-        array.unshift(createNewArrayItem(value, true, 'head', null));
+        array.unshift(new ArrayItem<string>(value, true, 'head', null));
         array[0].state = ElementStates.Modified;
 
         setElementsForRender([...array]);
@@ -78,7 +79,7 @@ export async function addNewElements(
         }
 
         array[currentIndex].head = null;
-        array.splice(currentIndex, 0, createNewArrayItem(value));
+        array.splice(currentIndex, 0, new ArrayItem<string>(value));
         array[currentIndex].state = ElementStates.Modified;
 
         setElementsForRender([...array]);
@@ -88,7 +89,7 @@ export async function addNewElements(
 }
 
 export async function deleteElements(
-    array: ArrayItem[],
+    array: IArrayItem[],
     action: 'deleteHead' | 'deleteTail' | 'deleteItemByIndex',
     setElementsForRender: SetState,
     index?: number

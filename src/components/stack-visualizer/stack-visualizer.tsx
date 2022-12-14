@@ -5,20 +5,20 @@ import { Stack } from './stack';
 import { getNewStackElements } from './utils';
 import { Visualizer } from './visualizer/visualizer';
 import styles from './styles.module.css';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
+import { useForm, IUseFormResult } from '../../hooks/use-form';
 
 
 export const StackVisualizer: React.FC = () => {
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem[]>([]);
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem[]>([]);
     const [animation, setAnimation] = useState<'addItem' | 'deleteItem' | ''>('');
+    const { values, handleChange, setValues }: IUseFormResult = useForm({ text: ''});
     const stack = useMemo(() => {
         return new Stack<string>(5)
     }, []);
-    const [inputValue, setInputValue] = useState<string>('');
-
-    const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
-        setInputValue(event.currentTarget.value)
-    };
+    const inputValue = useMemo(() => {
+        return values.text
+    }, [values.text]);
 
     const handleClearStackClick = () => {
         stack.clear();
@@ -37,12 +37,12 @@ export const StackVisualizer: React.FC = () => {
         const value = inputValue.trim();
 
         if (!value) {
-            setInputValue('');
+            setValues({...values, text: ''});
             return;
         }
         else {
             stack.push(value);
-            setInputValue('');
+            setValues({...values, text: ''});
             setAnimation('addItem');
             setElementsForRender(await getNewStackElements(stack.getStack(), setElementsForRender));
             setAnimation('');
@@ -52,7 +52,16 @@ export const StackVisualizer: React.FC = () => {
     return (
         <>
             <form className={styles.wrapper} onSubmit={handleAddItem}>
-                <Input maxLength={4} isLimitText value={inputValue} onChange={handleInputChange} disabled={stack.getSize() === stack.getMaxSize()} extraClass={styles.input} placeholder="Введите текст" />
+                <Input 
+                maxLength={4} 
+                isLimitText 
+                value={inputValue} 
+                onChange={handleChange} 
+                disabled={stack.getSize() === stack.getMaxSize()} 
+                extraClass={styles.input} 
+                placeholder="Введите текст" 
+                name='text'
+                />
                 <Button
                     text="Добавить"
                     type={"submit"}

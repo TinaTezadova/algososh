@@ -1,17 +1,17 @@
-import { ArrayItem } from '../../types/items';
-import { createNewArrayItem } from '../../utils/utils'
+import { ArrayItem } from '../../classes/array-item';
+import { IArrayItem } from '../../types/items';
 
 export interface IStack<T> {
     pop: () => void;
     push: (value: T) => void;
-    getStack: () => ArrayItem[];
+    getStack: () => IArrayItem<T>[];
     clear: () => void;
     getSize:() => number;
     getMaxSize:() => number;
 };
 
 export class Stack<T> implements IStack<T> {
-    array: ArrayItem[];
+    array: IArrayItem<T>[];
     maxStackSize: number;
 
     constructor(maxStackSize: number) {
@@ -25,7 +25,7 @@ export class Stack<T> implements IStack<T> {
 
     push(value: T) {
         if(this.maxStackSize > this.array.length) {
-            this.array.push(createNewArrayItem(value))
+            this.array.push(new ArrayItem<T>(value))
         }
     };
     

@@ -1,28 +1,11 @@
-import { nanoid } from "nanoid";
 import { SHORT_DELAY } from "../../consts/const";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
-import { ArrayItem, SetState } from "../../types/items";
+import { IArrayItem, SetState } from "../../types/items";
 import { swap, delay } from "../../utils/utils";
 
-const generateRandomNum = (minLen: number, maxLen: number) => {
-  const randomNum = Math.floor(minLen + Math.random() * (++maxLen - minLen));
-  return randomNum;
 
-};
-
-
-export const generateNewArray = () => {
-  const arrTemp = new Array(generateRandomNum(3, 17));
-  return Array.from(arrTemp, () => ({
-    id: nanoid(),
-    value: String(generateRandomNum(0, 100)),
-    state: ElementStates.Default
-  }));
-}
-
-
-export async function getSelectSort(array: ArrayItem[], sortType: Direction, setElementsForRender: SetState) {
+export async function getSelectSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState) {
 
   if (array.length > 0) {
     for (let i = 0; i < array.length; i++) {
@@ -33,13 +16,16 @@ export async function getSelectSort(array: ArrayItem[], sortType: Direction, set
         array[k].state = ElementStates.Changing;
         setElementsForRender([...array]);
         await delay(SHORT_DELAY);
-        if (sortType === Direction.Ascending ? array[k].value < array[minIndex].value : array[k].value > array[minIndex].value) {
+        const currentItemValue = Number(array[k].value);
+        const minIndexItemValue = Number(array[minIndex].value);
+        if (sortType === Direction.Ascending ? currentItemValue < minIndexItemValue : currentItemValue > minIndexItemValue) {
           minIndex = k;
         }
 
         array[k].state = ElementStates.Default;
         setElementsForRender([...array]);
       }
+      
       swap(array, i, minIndex);
 
       array[minIndex].state = ElementStates.Default;
@@ -54,7 +40,7 @@ export async function getSelectSort(array: ArrayItem[], sortType: Direction, set
 }
 
 
-export async function getBubbleSort(array: ArrayItem[], sortType: Direction, setElementsForRender: SetState) {
+export async function getBubbleSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState) {
   if (array.length > 0) {
     for (let i = 0; i < array.length; i++) {
       array[i].state = ElementStates.Changing;
@@ -63,7 +49,9 @@ export async function getBubbleSort(array: ArrayItem[], sortType: Direction, set
         setElementsForRender([...array]);
         await delay(SHORT_DELAY);
 
-        const condition = sortType === Direction.Ascending ? array[k].value < array[i].value : array[k].value > array[i].value;
+        const firstValue = Number(array[k].value);
+        const secondValue = Number(array[i].value);
+        const condition = sortType === Direction.Ascending ? firstValue < secondValue : firstValue > secondValue;
 
         if (condition) {
           swap(array, i, k);

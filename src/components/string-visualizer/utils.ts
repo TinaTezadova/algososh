@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
 import { DELAY } from "../../consts/const";
 import { ElementStates } from "../../types/element-states";
-import { ArrayItem, SetState } from "../../types/items";
+import { IArrayItem, SetState } from "../../types/items";
 import { swap, delay } from "../../utils/utils";
 
 export async function reversing(string: string, setElementsForRender: SetState) {
-    const newArr: ArrayItem[] = [];
+    const newArr: IArrayItem[] = [];
     for (let subString of string) {
         newArr.push({
             id: nanoid(),

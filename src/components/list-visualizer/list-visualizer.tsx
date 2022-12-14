@@ -1,41 +1,49 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
 import { List } from './list';
 import styles from './styles.module.css';
 import { addNewElements, deleteElements } from './utils';
 import { Visualizer } from './visualizer/visualizer';
+import { useForm, IUseFormResult } from '../../hooks/use-form';
+import { generateNewList } from '../../utils/utils';
 
 type AnimationType = 'addToHead' | 'addToTail' | 'deleteHead' | 'deleteTail' | 'addItemByIndex' | 'deleteItemByIndex' | '';
 
 export const ListVisualizer: React.FC = () => {
-    const [inputValue, setInputValue] = useState<string>('');
-    const [indexValue, setIndexValue] = useState<number | string>('');
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem[]>([]);
+    const { values, handleChange, setValues }: IUseFormResult = useForm({ value: '', index: '' });
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem[]>([]);
     const [animation, setAnimation] = useState<AnimationType>('');
     const list = useMemo(() => {
-        return new List<string>(5)
+        return new List<string>(6, generateNewList(4))
     }, []);
+
+    const indexValue = useMemo(() => {
+        return values.index
+    }, [values.index]);
+
+    const inputValue = useMemo(() => {
+        return values.value
+    }, [values.value]);
+
+
     const addItemByIndexBtnDisabled = useMemo((): boolean => {
         return !indexValue || inputValue === '' || animation !== '' || Number(indexValue) > list.getListLength() - 1
             || list.getListLength() === list.getListMaxSize()
 
-    }, [animation, indexValue, inputValue, list])
+    }, [animation, indexValue, inputValue, list]);
 
-    const handleValueChange = (event: React.FormEvent<HTMLInputElement>): void => {
-        setInputValue(event.currentTarget.value);
-    };
 
     const handleAddToHeadClick = async () => {
         const value = inputValue.trim();
         if (!value) {
-            setInputValue('')
+            setValues({ ...values, value: '' });
             return;
         }
 
         list.addToStart(inputValue);
-        setInputValue('');
+        setValues({ ...values, value: '' });
         setAnimation('addToHead');
         setElementsForRender(await addNewElements(elementsForRender, inputValue, 'addToHead', setElementsForRender));
         setElementsForRender(list.getListArray());
@@ -45,12 +53,12 @@ export const ListVisualizer: React.FC = () => {
     const handleAddToTailClick = async () => {
         const value = inputValue.trim();
         if (!value) {
-            setInputValue('')
+            setValues({ ...values, value: '' });
             return;
         }
 
         list.addToEnd(inputValue);
-        setInputValue('');
+        setValues({ ...values, value: '' });
         setAnimation('addToTail');
         setElementsForRender(await addNewElements(elementsForRender, inputValue, 'addToTail', setElementsForRender));
         setElementsForRender(list.getListArray());
@@ -78,20 +86,19 @@ export const ListVisualizer: React.FC = () => {
         const arrayTemp = Array.from(new Array(list.getListLength()), () => '')
 
         if (arrayTemp[Number(index)] === '') {
-            setIndexValue(index);
+            setValues({ ...values, index });
         }
     };
 
     const handleAddItemByIndex = async () => {
         const value = inputValue.trim();
         if (!value) {
-            setInputValue('')
+            setValues({ ...values, value: '' });
             return;
         }
 
         list.addItemByIndex(inputValue, Number(indexValue));
-        setInputValue('');
-        setIndexValue('');
+        setValues({ ...values, value: '', index: '' });
         setAnimation('addItemByIndex');
         setElementsForRender(await addNewElements(elementsForRender, inputValue, 'addItemByIndex', setElementsForRender, Number(indexValue)));
         setElementsForRender(list.getListArray());
@@ -101,7 +108,7 @@ export const ListVisualizer: React.FC = () => {
 
     const handleDeleteItemByIndex = async () => {
         list.deleteItemByIndex(Number(indexValue));
-        setIndexValue('');
+        setValues({ ...values, index: '' });
         setAnimation('deleteItemByIndex');
         setElementsForRender(await deleteElements(elementsForRender, 'deleteItemByIndex', setElementsForRender, Number(indexValue)));
         setElementsForRender(list.getListArray());
@@ -122,9 +129,10 @@ export const ListVisualizer: React.FC = () => {
                         value={inputValue}
                         maxLength={4}
                         isLimitText
-                        onChange={handleValueChange}
+                        onChange={handleChange}
                         disabled={list.getListLength() === list.getListMaxSize() || animation !== ''}
                         extraClass={styles.input}
+                        name='value'
                     />
                     <Button
                         text="Добавить в head"
@@ -169,6 +177,7 @@ export const ListVisualizer: React.FC = () => {
                         disabled={animation !== '' || list.getListLength() === 0}
                         onChange={handleIndexChange}
                         extraClass={styles.input}
+                        name='index'
                     />
                     <Button
                         text="Добавить по индексу"

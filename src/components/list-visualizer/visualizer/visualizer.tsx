@@ -1,12 +1,12 @@
 import React from 'react';
 import { ElementStates } from '../../../types/element-states';
-import { ArrayItem } from '../../../types/items';
+import { IArrayItem } from '../../../types/items';
 import { Circle } from '../../ui/circle/circle';
 import { ArrowIcon } from '../../ui/icons/arrow-icon';
 import styles from './styles.module.css';
 
 interface Props {
-    elementsForRender: ArrayItem[];
+    elementsForRender: IArrayItem[];
 }
 
 export const Visualizer: React.FC<Props> = ({ elementsForRender }) => {

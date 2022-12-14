@@ -1,10 +1,10 @@
 import React from 'react';
-import { ArrayItem } from '../../../types/items';
+import { IArrayItem } from '../../../types/items';
 import { Column } from '../../ui/column/column';
 import styles from './styles.module.css';
 
 interface Props {
-    elementsForRender: ArrayItem[];
+    elementsForRender: IArrayItem[];
 }
 export const Visualizer: React.FC<Props> = ({ elementsForRender }) => {
 

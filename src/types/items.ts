@@ -1,6 +1,6 @@
 import { ElementStates } from './element-states';
 
-export type ArrayItem<T = string> = {
+export type IArrayItem<T = string> = {
   id: string;
   value: T;
   state: ElementStates;
@@ -9,7 +9,7 @@ export type ArrayItem<T = string> = {
   gone?: boolean
 };
 
-export type SetState = React.Dispatch<React.SetStateAction<ArrayItem[]>>;
+export type SetState = React.Dispatch<React.SetStateAction<IArrayItem[]>>;
 
 export interface ListNode<T> {
   id: string;

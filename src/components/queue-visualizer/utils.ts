@@ -1,10 +1,10 @@
 
 import { ElementStates } from '../../types/element-states';
-import { ArrayItem, SetState } from '../../types/items';
+import { IArrayItem, SetState } from '../../types/items';
 import { delay } from '../../utils/utils';
 import { SHORT_DELAY } from '../../consts/const'
 
-export async function getNewQueueElements(array: ArrayItem[], index: number, setElementsForRender: SetState) {
+export async function getNewQueueElements(array: IArrayItem[], index: number, setElementsForRender: SetState) {
     if (array.length > 0) {
         array[index].state = ElementStates.Changing;
         setElementsForRender([...array]);

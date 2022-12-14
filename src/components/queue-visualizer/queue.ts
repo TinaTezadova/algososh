@@ -1,11 +1,11 @@
-import { ArrayItem } from "../../types/items";
-import { createNewArrayItem } from '../../utils/utils';
+import { ArrayItem } from "../../classes/array-item";
+import { IArrayItem } from "../../types/items";
 
 export interface IQueue<T> {
     enqueue: (value: T) => void;
     dequeue: () => void;
     clear: () => void;
-    getQueue: () => ArrayItem<T>[];
+    getQueue: () => IArrayItem<T | string>[];
     getQueueLength: () => number;
     getMaxSize: () => number;
     getHeadPointer: () => number;
@@ -13,7 +13,7 @@ export interface IQueue<T> {
 };
 
 export class Queue<T> implements IQueue<T> {
-    array: ArrayItem[];
+    array: IArrayItem<T>[];
     maxQueueSize: number;
     queueLength: number;
     headPointer: number;
@@ -35,8 +35,8 @@ export class Queue<T> implements IQueue<T> {
             else {
                 this.tailPointer = 0;
             }
-            
-            this.array[this.tailPointer] = createNewArrayItem(value);
+
+            this.array[this.tailPointer] = new ArrayItem<T>(value);
             this.queueLength++;
         }
         else {
@@ -71,7 +71,7 @@ export class Queue<T> implements IQueue<T> {
     };
 
     getQueue() {
-        const container = Array.from(new Array(this.maxQueueSize), () => createNewArrayItem('', true));
+        const container = Array.from(new Array(this.maxQueueSize), () => new ArrayItem<T | string>('', true));
         if (this.queueLength > 0) {
             this.array.forEach((item, index) => {
                 container[index].value = item.value;

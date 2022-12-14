@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button } from '../ui/button/button';
 import { Input } from '../ui/input/input';
 import { reversing } from './utils';
 import { Visualizer } from './visualizer/visualizer';
 import styles from './styles.module.css';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
+import { useForm, IUseFormResult } from '../../hooks/use-form';
 
 export const StringVisualizer: React.FC = () => {
-    const [inputValue, setInputValue] = useState<string>('');
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem[]>([]);
+    const { values, handleChange }: IUseFormResult = useForm({ text: ''});
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem[]>([]);
     const [animation, setAnimation] = useState<boolean>(false);
 
-    const handleInputChange = (event: React.FormEvent<HTMLInputElement>): void => {
-        setInputValue(event.currentTarget.value)
-    };
+    const inputValue = useMemo(() => {
+        return values.text
+    }, [values.text]);
 
     const handleReverseString = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -33,15 +34,17 @@ export const StringVisualizer: React.FC = () => {
                     spellCheck={false}
                     maxLength={11}
                     extraClass={`${styles.input} mr-6`}
-                    onChange={handleInputChange}
+                    onChange={handleChange}
                     disabled={animation}
                     isLimitText
+                    name='text'
                 />
                 <Button
                     text="Развернуть"
                     type="submit"
                     isLoader={animation}
                     extraClass={styles.button}
+                    disabled={animation || !inputValue}
                 />
             </form>
             <Visualizer elementsForRender={elementsForRender} />

@@ -5,19 +5,20 @@ import styles from './styles.module.css';
 import { getFibonacci } from './utils';
 import { delay } from '../../utils/utils';
 import { Visualizer } from './visualizer/visualizer';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
+import { useForm, IUseFormResult } from '../../hooks/use-form';
 
 export const FibonacciVisualizer = () => {
-    const [inputValue, setInputValue] = useState<string>('');
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem<number>[]>([]);
+    const { values, handleChange }: IUseFormResult = useForm({number: ''});
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem<number>[]>([]);
     const [animation, setAnimation] = useState<boolean>(false);
+    const inputValue = useMemo(() => {
+        return values.number
+    }, [values.number]);
+
     const isButtonDisabled = useMemo((): boolean => {
         return inputValue === '' || Number(inputValue) < 1 || Number(inputValue) > 19
     }, [inputValue]);
-
-    const handleInputChange = (event: React.FormEvent<HTMLInputElement>): void => {
-        setInputValue(event.currentTarget.value)
-    };
 
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -25,7 +26,7 @@ export const FibonacciVisualizer = () => {
 		setElementsForRender([]);
 		const array = getFibonacci(Number(inputValue)); 
 		for (let i = 0; i < array.length; i++) {
-			setElementsForRender((prev: any) => [...prev, array[i]]);
+			setElementsForRender((prev: IArrayItem<number>[]) => [...prev, array[i]]);
 			await delay(500);
 		}
 		setAnimation(false);
@@ -42,10 +43,11 @@ export const FibonacciVisualizer = () => {
                     min={1}
                     max={19}
                     maxLength={1}
-                    onChange={handleInputChange}
+                    onChange={handleChange}
                     isLimitText
                     extraClass={`${styles.input} mr-6`}
                     disabled={animation}
+                    name='number'
                 />
                 <Button
                     text="Рассчитать"

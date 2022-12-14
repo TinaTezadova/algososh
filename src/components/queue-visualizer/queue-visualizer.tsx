@@ -1,23 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
 import { Queue } from './queue';
 import { getNewQueueElements } from './utils';
 import { Visualizer } from './visualizer/visualizer';
 import styles from './styles.module.css';
+import { useForm, IUseFormResult } from '../../hooks/use-form';
 
 export const QueueVisualizer: React.FC = () => {
-    const [inputValue, setInputValue] = useState<string>('');
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem[]>([]);
+    const { values, handleChange, setValues }: IUseFormResult = useForm({ value: ''});
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem[]>([]);
     const [animation, setAnimation] = useState<'addItem' | 'deleteItem' | ''>('');
     const queue = useMemo(() => {
         return new Queue<string>(5)
     }, []);
 
-    const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
-        setInputValue(event.currentTarget.value);
-    };
+    const inputValue = useMemo(() => {
+        return values.value
+    }, [values.value]);
 
     const handleClearClick = () => {
         queue.clear();
@@ -36,13 +37,13 @@ export const QueueVisualizer: React.FC = () => {
         const value = inputValue.trim();
 
         if (!value) {
-            setInputValue('');
+            setValues({...values, value: ''});
             return;
         }
         else {
 
             queue.enqueue(value);
-            setInputValue('');
+            setValues({...values, value: ''});
             setAnimation('addItem');
             setElementsForRender(await getNewQueueElements(queue.getQueue(), queue.getTailPointer(), setElementsForRender));
             setAnimation('');
@@ -59,7 +60,16 @@ export const QueueVisualizer: React.FC = () => {
     return (
         <>
             <form className={styles.wrapper} onSubmit={handleAddItem}>
-                <Input maxLength={4} isLimitText value={inputValue} onChange={handleInputChange} disabled={queue.getQueueLength() === queue.getMaxSize()} extraClass={styles.input} placeholder="Введите значение" />
+                <Input 
+                maxLength={4} 
+                isLimitText 
+                value={inputValue} 
+                onChange={handleChange} 
+                disabled={queue.getQueueLength() === queue.getMaxSize()} 
+                extraClass={styles.input} 
+                placeholder="Введите значение" 
+                name='value'
+                />
                 <Button
                     text="Добавить"
                     type={"submit"}

@@ -1,5 +1,7 @@
-import { ArrayItem, ListNode } from "../../types/items";
-import { createNewArrayItem, createNewListItem } from '../../utils/utils';
+import { IArrayItem, ListNode } from "../../types/items";
+import { ListItem } from '../../classes/list-item';
+import { ArrayItem } from '../../classes/array-item';
+import { generateNewArray } from "../../utils/utils";
 
 interface IList<T> {
     addToEnd: (item: T) => void;
@@ -8,7 +10,7 @@ interface IList<T> {
     addItemByIndex: (item: T, index: number) => void;
     deleteHeadItem: () => void;
     deleteTailItem: () => void;
-    getListArray: () => ArrayItem<T>[];
+    getListArray: () => IArrayItem<T | string>[];
     getListLength: () => number;
     getListMaxSize: () => number;
     getHeadPointer: () => ListNode<T> | null;
@@ -21,7 +23,7 @@ export class List<T> implements IList<T> {
     tailPointer: ListNode<T> | null;
     headPointer: ListNode<T> | null;
 
-    constructor(maxListSize: number, nodeItem?: ListNode<T>) {
+    constructor(maxListSize: number, nodeItem?: ListNode<T> | null) {
         this.maxListSize = maxListSize;
         if (nodeItem) {
             this.headPointer = nodeItem;
@@ -47,7 +49,7 @@ export class List<T> implements IList<T> {
             throw new Error("Maximum length exceeded");
         }
 
-        const node = createNewListItem(item);
+        const node = new ListItem<T>(item);
         if (this.tailPointer) {
             this.tailPointer.next = node;
             this.tailPointer = this.tailPointer.next;
@@ -62,7 +64,7 @@ export class List<T> implements IList<T> {
         if (this.listLength === this.maxListSize) {
             throw new Error("Maximum length exceeded");
         }
-        const node = createNewListItem(item);
+        const node = new ListItem<T>(item);
         if (this.headPointer) {
             node.next = this.headPointer;
             this.headPointer = node;
@@ -117,7 +119,7 @@ export class List<T> implements IList<T> {
         }
 
         if (index > 0 && this.listLength > index) {
-            const node = createNewListItem(item);
+            const node = new ListItem<T>(item);
 
             let currentItem = this.headPointer;
             let currentIndex = 0;
@@ -174,7 +176,7 @@ export class List<T> implements IList<T> {
         if (this.listLength > 0) {
             let currentItem = this.headPointer;
             while (currentItem) {
-                array.push(createNewArrayItem(currentItem.value));
+                array.push(new ArrayItem<T>(currentItem.value));
 
                 currentItem = currentItem.next;
             }

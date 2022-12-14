@@ -1,31 +1,43 @@
 import { nanoid } from 'nanoid';
+import { ListItem } from '../classes/list-item';
 import { ElementStates } from '../types/element-states';
-import { ArrayItem, ListNode } from '../types/items';
+import { IArrayItem, ListNode } from '../types/items';
 
 export const delay = (delayInMs: number) => new Promise<void>(resolve => setTimeout(resolve, delayInMs));
 
-export const swap = (array: any[], firstIndex: number, secondIndex: number): void => {
+export const swap = (array: Array<number | string | IArrayItem>, firstIndex: number, secondIndex: number): void => {
     const temp = array[firstIndex];
     array[firstIndex] = array[secondIndex];
     array[secondIndex] = temp;
 }
 
-export const createNewArrayItem = (value: any, addPointers = false, head?: string | null, tail?:string | null, gone?: boolean): ArrayItem<any> => {
-    const item = {
-        id: nanoid(),
-        value: value,
-        state: ElementStates.Default,
-    }
-    const headVal = head || head === null ? head : '';
-    const tailVal = tail || tail === null ? tail : '';
-    return addPointers ? {...item, head: headVal, tail: tailVal, gone} : item
-}
+const generateRandomNum = (minLen: number, maxLen: number) => {
+    const randomNum = Math.floor(minLen + Math.random() * (++maxLen - minLen));
+    return randomNum;
 
-export const createNewListItem = (value: any, nextItem: ListNode<any> | null = null): ListNode<any> => {
-    return {
+};
+
+
+export const generateNewArray = (minLen: number, maxLen: number): IArrayItem[] => {
+    const arrTemp = new Array(generateRandomNum(minLen, maxLen));
+    return Array.from(arrTemp, () => ({
         id: nanoid(),
-        value: value,
-        state: ElementStates.Default,
-        next: nextItem,
-    };
+        value: String(generateRandomNum(0, 100)),
+        state: ElementStates.Default
+    }));
+};
+
+export const generateNewList = (maxLen: number): ListNode<string> | null => {
+    const randomNumber = Math.floor(Math.random() * maxLen) + 1;
+    const headNode = new ListItem<string>(String(0));
+    let current = headNode;
+
+    for (let i = 0; i < randomNumber; i++) {
+        const newNode = new ListItem<string>(String(generateRandomNum(1, 99)));
+        current.next = newNode;
+        current = current.next;
+    }
+
+    return headNode.next;
+
 }

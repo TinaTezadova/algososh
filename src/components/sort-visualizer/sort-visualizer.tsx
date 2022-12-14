@@ -3,20 +3,23 @@ import { RadioInput } from '../ui/radio-input/radio-input';
 import { Button } from '../ui/button/button';
 import { Direction } from '../../types/direction';
 import styles from './styles.module.css';
-import { generateNewArray, getBubbleSort, getSelectSort } from './utils';
+import { getBubbleSort, getSelectSort } from './utils';
+import { generateNewArray } from '../../utils/utils';
 import { Visualizer } from './visualizer/visualizer';
-import { ArrayItem } from '../../types/items';
+import { IArrayItem } from '../../types/items';
 
 type SortMethod = 'bubble' | 'select';
+type SortType = 'ascending' | 'descending';
 
 export const SortVisualizer: React.FC = () => {
     const [sortMethod, setSortMethod] = useState<SortMethod>('select');
-    const [sortType, setSortType] = useState<any>('ascending');
-    const [elementsForRender, setElementsForRender] = useState<ArrayItem[]>([]);
+    const [sortType, setSortType] = useState<SortType>('ascending');
+    const [elementsForRender, setElementsForRender] = useState<IArrayItem[]>([]);
     const [animation, setAnimation] = useState<boolean>(false);
 
-    const handleSortMethodChange = (event: any): void => {
-        setSortMethod(event.target.value);
+    const handleSortMethodChange = (event: React.FormEvent<HTMLInputElement>): void => {
+        const value = event.currentTarget.value as SortMethod;
+        setSortMethod(value);
     };
 
     const handleArraySort = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,7 +41,7 @@ export const SortVisualizer: React.FC = () => {
     };
 
     const handleCreateNewArrayClick = () => {
-        setElementsForRender(generateNewArray())
+        setElementsForRender(generateNewArray(3, 17))
     }
 
     useEffect(() => {
@@ -47,7 +50,7 @@ export const SortVisualizer: React.FC = () => {
 
     return (
         <>
-            <div className={styles.wrapper}>
+            <form className={styles.wrapper}>
                 <RadioInput label='Выбор' value="select" name="type" checked={sortMethod === 'select'} disabled={animation} onChange={handleSortMethodChange} />
                 <RadioInput label='Пузырёк' value="bubble" name="type" checked={sortMethod === 'bubble'} disabled={animation} onChange={handleSortMethodChange} extraClass={"ml-10"} />
                 <Button
@@ -76,7 +79,7 @@ export const SortVisualizer: React.FC = () => {
                     disabled={animation}
                     onClick={handleCreateNewArrayClick}
                     extraClass={`${styles.button} ml-40`} />
-            </div>
+            </form>
             <Visualizer elementsForRender={elementsForRender} />
         </>
     )

@@ -1,17 +1,17 @@
-import { ArrayItem } from '../../types/items';
-import { createNewArrayItem } from "../../utils/utils";
+import { IArrayItem } from '../../types/items';
+import { ArrayItem } from '../../classes/array-item';
 
 
-export function getFibonacci(number: number): ArrayItem<number>[] {
-    const newArr: ArrayItem<number>[] = [];
+export function getFibonacci(number: number): IArrayItem<number>[] {
+    const newArr: IArrayItem<number>[] = [];
     let numA = 0;
     let numB = 1;
     let sum;
-    newArr.push(createNewArrayItem(numB));
+    newArr.push(new ArrayItem(numB));
 
     for(let i = 0; i < number; i++) {
         sum = numA + numB;
-        newArr.push(createNewArrayItem(sum));
+        newArr.push(new ArrayItem(sum));
         numA = numB;
         numB = sum;
 
