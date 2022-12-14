@@ -1,0 +1,11 @@
+.wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 340px;
+    margin-top: 48px;
+}
+
+.column:last-child {
+    margin: 0;
+}
