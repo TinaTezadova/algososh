@@ -9,6 +9,8 @@ export async function getNewQueueElements(array: IArrayItem[], index: number, se
         array[index].state = ElementStates.Changing;
         setElementsForRender([...array]);
         await delay(SHORT_DELAY);
+        array[index].state = ElementStates.Default;
+        setElementsForRender([...array]);
         return array;
     }
     else {

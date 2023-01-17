@@ -76,12 +76,14 @@ export const StackVisualizer: React.FC = () => {
                     disabled={stack.getSize() === 0}
                     extraClass="ml-6"
                     onClick={handleStackDeleteClick}
+                    data-testid='delete-stack-item-btn'
                 />
                 <Button
                     text="Очистить"
                     disabled={stack.getSize() === 0}
                     extraClass="ml-40"
                     onClick={handleClearStackClick}
+                    data-testid='clear-stack-btn'
                 />
             </form>
             <Visualizer elementsForRender={elementsForRender} />

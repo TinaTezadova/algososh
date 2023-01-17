@@ -5,7 +5,7 @@ import { IArrayItem, SetState } from "../../types/items";
 import { swap, delay } from "../../utils/utils";
 
 
-export async function getSelectSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState) {
+export async function getSelectSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState | ((arr: IArrayItem[])=> void)) {
 
   if (array.length > 0) {
     for (let i = 0; i < array.length; i++) {
@@ -40,7 +40,7 @@ export async function getSelectSort(array: IArrayItem[], sortType: Direction, se
 }
 
 
-export async function getBubbleSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState) {
+export async function getBubbleSort(array: IArrayItem[], sortType: Direction, setElementsForRender: SetState | ((arr: IArrayItem[])=> void)) {
   if (array.length > 0) {
     for (let i = 0; i < array.length; i++) {
       array[i].state = ElementStates.Changing;

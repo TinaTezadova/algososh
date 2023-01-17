@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Тестирвание компонента Button Рендер заблокированной кнопки 1`] = `
+<button
+  class="text text_type_button text_color_primary button undefined false "
+  disabled=""
+  type="button"
+>
+  <p
+    class="text undefined"
+  />
+</button>
+`;
+
+exports[`Тестирвание компонента Button Рендер кнопки без текста 1`] = `
+<button
+  class="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    class="text undefined"
+  />
+</button>
+`;
+
+exports[`Тестирвание компонента Button Рендер кнопки с лоадером 1`] = `
+<button
+  class="text text_type_button text_color_primary button undefined loader "
+  disabled=""
+  type="button"
+>
+  <img
+    alt="Загрузка."
+    class="loader_icon"
+    src="loader.svg"
+  />
+</button>
+`;
+
+exports[`Тестирвание компонента Button Рендер кнопки с текстом 1`] = `
+<button
+  class="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    class="text undefined"
+  >
+    Текст
+  </p>
+</button>
+`;
