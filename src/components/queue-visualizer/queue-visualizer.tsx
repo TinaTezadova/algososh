@@ -7,6 +7,9 @@ import { getNewQueueElements } from './utils';
 import { Visualizer } from './visualizer/visualizer';
 import styles from './styles.module.css';
 import { useForm, IUseFormResult } from '../../hooks/use-form';
+import { ElementStates } from 'types/element-states';
+import { delay } from 'utils/utils';
+import { SHORT_DELAY } from 'consts/const';
 
 export const QueueVisualizer: React.FC = () => {
     const { values, handleChange, setValues }: IUseFormResult = useForm({ value: ''});
@@ -27,6 +30,18 @@ export const QueueVisualizer: React.FC = () => {
 
     const handleDeleteClick = async () => {
         setAnimation('deleteItem');
+        setElementsForRender(elementsForRender.map((item, index) => {
+            if(index === queue.getHeadPointer()) {
+                return {
+                    ...item,
+                    state: ElementStates.Changing
+                }
+            }
+            else {
+                return item
+            }
+        }))
+        await delay(SHORT_DELAY);
         queue.dequeue();
         setElementsForRender(await getNewQueueElements(queue.getQueue(), queue.getHeadPointer(), setElementsForRender));
         setAnimation('');
@@ -84,12 +99,14 @@ export const QueueVisualizer: React.FC = () => {
                     disabled={queue.getQueueLength() === 0}
                     extraClass="ml-6"
                     onClick={handleDeleteClick}
+                    data-testid='delete-queue-item-btn'
                 />
                 <Button
                     text="Очистить"
                     disabled={queue.getQueueLength() === 0}
                     extraClass="ml-40"
                     onClick={handleClearClick}
+                    data-testid='clear-queue-btn'
                 />
             </form>
             <Visualizer elementsForRender={elementsForRender}/>

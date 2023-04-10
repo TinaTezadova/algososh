@@ -133,6 +133,7 @@ export const ListVisualizer: React.FC = () => {
                         disabled={list.getListLength() === list.getListMaxSize() || animation !== ''}
                         extraClass={styles.input}
                         name='value'
+                        data-testid='value-input'
                     />
                     <Button
                         text="Добавить в head"
@@ -141,6 +142,7 @@ export const ListVisualizer: React.FC = () => {
                         onClick={handleAddToHeadClick}
                         linkedList="small"
                         extraClass={'ml-6'}
+                        data-testid='add-to-head-btn'
                     />
                     <Button
                         text="Добавить в tail"
@@ -149,6 +151,7 @@ export const ListVisualizer: React.FC = () => {
                         onClick={handleAddToTailClick}
                         linkedList="small"
                         extraClass={'ml-6'}
+                        data-testid='add-to-tail-btn'
                     />
                     <Button
                         text="Удалить из head"
@@ -157,6 +160,7 @@ export const ListVisualizer: React.FC = () => {
                         onClick={handleDeleteFromHeadClick}
                         linkedList="small"
                         extraClass={'ml-6'}
+                        data-testid='delete-from-head-btn'
                     />
                     <Button
                         text="Удалить из tail"
@@ -165,6 +169,7 @@ export const ListVisualizer: React.FC = () => {
                         onClick={handleDeleteFromTailClick}
                         linkedList="small"
                         extraClass={'ml-6'}
+                        data-testid='delete-from-tail-btn'
                     />
                 </div>
                 <div className={styles.row}>
@@ -178,6 +183,7 @@ export const ListVisualizer: React.FC = () => {
                         onChange={handleIndexChange}
                         extraClass={styles.input}
                         name='index'
+                        data-testid='index-input'
                     />
                     <Button
                         text="Добавить по индексу"
@@ -186,6 +192,7 @@ export const ListVisualizer: React.FC = () => {
                         disabled={addItemByIndexBtnDisabled}
                         onClick={handleAddItemByIndex}
                         extraClass={'ml-6'}
+                        data-testid='add-by-index-btn'
                     />
                     <Button
                         text="Удалить по индексу"
@@ -194,6 +201,7 @@ export const ListVisualizer: React.FC = () => {
                         disabled={!indexValue || list.getListLength() === 0 || animation !== '' || Number(indexValue) > list.getListLength() - 1}
                         onClick={handleDeleteItemByIndex}
                         extraClass={'ml-6'}
+                        data-testid='delete-by-index-btn'
                     />
                 </div>
             </form>

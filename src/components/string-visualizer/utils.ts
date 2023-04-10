@@ -4,7 +4,7 @@ import { ElementStates } from "../../types/element-states";
 import { IArrayItem, SetState } from "../../types/items";
 import { swap, delay } from "../../utils/utils";
 
-export async function reversing(string: string, setElementsForRender: SetState) {
+export async function reversing(string: string, setElementsForRender: SetState | ((arr: IArrayItem[])=> void)) {
     const newArr: IArrayItem[] = [];
     for (let subString of string) {
         newArr.push({
